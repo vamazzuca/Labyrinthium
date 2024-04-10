@@ -14,16 +14,18 @@
 
         public string Time { get; set; }
 
-        public string ScareLevel { get; set; }
+        public string? ScareLevel { get; set; }
 
 
         public string Description { get; set; }
+
+        public string AltImage { get; set; }
 
         public string Address { get; set; }
 
         public string Phone { get; set; }
 
-        public int AgeRequirement { get; set; }
+        public string? AgeRequirement { get; set; }
 
         public string Website { get; set; }
 
@@ -35,7 +37,7 @@
 
         public string Image { get; set; }
 
-        public string AltImage { get; set; }
+        
 
 
 
