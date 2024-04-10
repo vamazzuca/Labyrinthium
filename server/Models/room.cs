@@ -1,6 +1,6 @@
 ﻿namespace server.Models
 {
-    public class room
+    public class Room
     {
         public int Id { get; set; }
 
@@ -37,6 +37,7 @@
 
         public string Image { get; set; }
 
+        public ICollection<UserRoom>? UserRooms { get; set; }
         
 
 
