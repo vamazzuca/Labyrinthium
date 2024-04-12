@@ -65,3 +65,4 @@ C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\runtimes\wi
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\MySqlConnector.dll
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\GeoCoordinate.NetCore.dll

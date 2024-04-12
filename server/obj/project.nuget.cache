@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "uQFom8Z3CrI9EK2k733iaOL4KxN8CtzCDzcV83TC6Phg7/Ki7SuwdgK1KJ680EtDiPRmkEDUiC7cY0U0bt5ZRQ==",
+  "dgSpecHash": "e6V43znmuUR30j2b65/o11e0zla6GmSbFO+483mlZWEeinmlVIz+m+D1BtPXz/JkrY7TbwdEqVk4fEXmHxSfSA==",
   "success": true,
   "projectFilePath": "C:\\Users\\mazzu\\Documents\\GitHub\\Labyrinthium\\server\\server.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\mazzu\\.nuget\\packages\\geocoordinate.netcore\\1.0.0.1\\geocoordinate.netcore.1.0.0.1.nupkg.sha512",
     "C:\\Users\\mazzu\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\mazzu\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\mazzu\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",

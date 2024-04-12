@@ -2,7 +2,7 @@
 {
     public class UserRoom
     {
-        public int Id { get; set; }
+        
         public int UserId { get; set; }
         public int EscapeRoomId { get; set; }
         public DateTime? DateTime { get; set; }
