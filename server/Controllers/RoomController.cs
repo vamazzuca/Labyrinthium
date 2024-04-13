@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using server.Helper;
 using server.Interfaces;
 using server.Models;
 
@@ -16,9 +17,9 @@ namespace server.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Room>))]
-        public IActionResult GetRooms() 
+        public async Task<IActionResult> GetRooms() 
         { 
-            var rooms = _roomRepository.GetRooms();
+            var rooms = await _roomRepository.GetRooms();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -26,8 +27,25 @@ namespace server.Controllers
             return Ok(rooms);
         }
 
+        [HttpGet("{roomId}")]
+        [ProducesResponseType(200, Type = typeof(Room))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetRoom(int roomId)
+        {
+
+            if (!_roomRepository.RoomExists(roomId))
+                return NotFound();
+
+            var room = await _roomRepository.GetRoom(roomId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(room);
+        }
+
         [HttpGet("search")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Room>))]
+        [ProducesResponseType(200, Type = typeof(List<CompanyRoom>))]
         public async Task<IActionResult> SearchRooms(double latitude, double longitude, string? query = null)
         {
            

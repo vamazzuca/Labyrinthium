@@ -1,6 +1,7 @@
 ﻿using GeoCoordinatePortable;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Helper;
 using server.Interfaces;
 using server.Models;
 
@@ -20,12 +21,17 @@ namespace server.Repository
 
         }
 
-        public ICollection<Room> GetRooms()
+        public async Task<ICollection<Room>> GetRooms()
         {
-            return _context.Rooms.OrderBy(p => p.Id).ToList();
+            return await _context.Rooms.OrderBy(p => p.Id).ToListAsync();
+        }
+        
+        public async Task<Room> GetRoom(int id)
+        {
+            return await _context.Rooms.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Room>> SearchRooms(string searchQuery, double latitude, double longitude)
+        public async Task<List<CompanyRoom>> SearchRooms(string searchQuery, double latitude, double longitude)
         {
             IQueryable<Room> filteredRooms = _context.Rooms;
 
@@ -44,19 +50,34 @@ namespace server.Repository
             var filteredRoomsEnumerable = filteredRoomsList.AsEnumerable().Where(room =>
                 new GeoCoordinate(room.Latitude, room.Longitude)
                     .GetDistanceTo(userLocation) <= 100000 // 100 km in meters
-    );
+            );
 
-            var groupedRooms = filteredRoomsEnumerable
+            var sortedRooms = filteredRoomsEnumerable
+                .OrderBy(room =>
+                    new GeoCoordinate(room.Latitude, room.Longitude)
+                        .GetDistanceTo(userLocation)
+            );
+
+
+            var groupedRooms = sortedRooms
                 .Where(room => room.Company != null)
                 .GroupBy(room => room.Company)
-                .ToList();
+                .Select(group => new CompanyRoom
+                {
+                     CompanyName = group.Key,
+                     Rooms = group.ToList()
+                }).ToList();
 
 
-            var flattenedRooms = groupedRooms.SelectMany(group => group);
 
-            return flattenedRooms.ToList();
+            return groupedRooms;
 
 
+        }
+
+        public bool RoomExists(int roomId)
+        {
+           return _context.Rooms.Any(p => p.Id == roomId);
         }
     }
 }
