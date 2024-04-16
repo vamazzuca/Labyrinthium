@@ -19,11 +19,12 @@ namespace server.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, IUserRepository userRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _userRepository = userRepository;
 
         }
 
@@ -44,15 +45,28 @@ namespace server.Controllers
                 return BadRequest(new { message = "Username already in use." });
 
             var user = new User { UserName = request.Username, Email = request.Email, Name = request.Name};
-
+            Console.WriteLine("Test");
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
-                return BadRequest(new { message = "Invalid signup request." });
-
+            {
+                var passwordErrors = result.Errors.Where(error => error.Code.StartsWith("Password"));
+                if (passwordErrors.Any())
+                {
+                    
+                    var errorMessages = passwordErrors.Select(error => error.Description);
+                    return BadRequest(new { message = "Invalid signup request.", errors = errorMessages });
+                }
+                else
+                {
+                
+                    return BadRequest(new { message = "Invalid signup request." });
+                }
+            }
             var token = GenerateJwtToken(user);
 
             return Ok(new { user, token });
         }
+
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
@@ -84,8 +98,7 @@ namespace server.Controllers
         [HttpGet("getUser")]
         public async Task<IActionResult> GetUser(string username)
         {
-            try
-            {
+            
                 var user = await _userRepository.GetUserByUsername(username);
                 if (user == null)
                     return BadRequest(new { message = "Can't find User" });
@@ -102,18 +115,14 @@ namespace server.Controllers
                 };
 
                 return Ok(new { result });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = $"Something went wrong: {ex}" });
-            }
+            
+            
         }
 
         [HttpPost("updateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserUpdateRequest request)
         {
-            try
-            {
+            
                 var existingUser = await _userRepository.GetUserByUsername(request.Username);
                 if (existingUser != null && existingUser.Id != request.Id)
                     return BadRequest(new { message = "Username already in use." });
@@ -134,16 +143,13 @@ namespace server.Controllers
                 };
 
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = $"Something went wrong:{ex}" });
-            }
+            
         }
         private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Secret").Value));
+            
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -153,9 +159,9 @@ namespace server.Controllers
                 new Claim(ClaimTypes.Email, user.Email),
                  
                 }),
-                Expires = DateTime.MaxValue, 
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                Expires = DateTime.MaxValue,
+                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
+        };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);

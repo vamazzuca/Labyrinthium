@@ -8,12 +8,11 @@ namespace server.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DataContext _context;
+       
         private readonly UserManager<User> _userManager;
 
-        public UserRepository(DataContext context, UserManager<User> userManager)
+        public UserRepository(UserManager<User> userManager)
         {
-            _context = context;
             _userManager = userManager;
         }
 

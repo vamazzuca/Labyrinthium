@@ -66,3 +66,8 @@ C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\runtimes\wi
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\MySqlConnector.dll
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\GeoCoordinate.NetCore.dll
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
