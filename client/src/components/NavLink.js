@@ -13,7 +13,7 @@ const NavLink = ({title, link, color, icon}) => {
     }
     return (
         <Link onClick={handleLink } to={link}>
-            <div className={`flex flex-col py-2 pl-3 pr-4 text-${color} sm:text-sm font-medium rounded md:p-0 hover:text-[#137390] items-center cursor cursor-pointer`}>
+            <div className={`flex flex-col py-2 pl-3 pr-4 text-${color} sm:text-sm font-medium rounded md:p-0 hover:text-[#56B0CF] items-center cursor cursor-pointer`}>
                 {icon}
                 {title}
             </div>
