@@ -24,7 +24,7 @@ function Input({placeholder, value, type, maxLength, disabled, onChange, onFocus
                     rounded-md
                     outline-none
                     text-white
-                    focus:border-[#66FCF1]
+                    focus:border-cyan-600
                     focus:border-2
                     transition
                     disabled:bg-neutral-900

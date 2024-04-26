@@ -1,57 +1,51 @@
 import useLoginModal from "../../hooks/useLoginModel";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Input from "../input"
 import Modal from "./modal";
 import useRegisterModal from "../../hooks/useRegisterModel";
 import { useDispatch } from "react-redux";
-import { signIn } from '../../actions/auth';
+import { signUp } from '../../actions/auth';
 import { useNavigate } from "react-router-dom"
 
-
-function LoginModal() {
+function RegisterModal() {
     const loginModal = useLoginModal();
     const registerModal = useRegisterModal();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-
-    useEffect(() => {
-        if (!loginModal.isOpen) {
-            setPassword("")
-            setEmail("")
-        }
-    }, [loginModal])
-    
     const onToggle = useCallback(() => {
         if (isLoading) {
             return;
         }
 
-        loginModal.onClose();
-        registerModal.onOpen();
+        registerModal.onClose();
+        loginModal.onOpen();
     }, [isLoading, registerModal, loginModal])
 
     const onSubmit = useCallback(async (e) => {
         try {
             setIsLoading(true);
             e.preventDefault();
-            const formData = { email: email, password: password};
-            dispatch(signIn(formData, navigate, loginModal));
-            
+            const formData = { email: email, username: username.trim(), password: password.trim(), confirmPassword: confirmPassword.trim(), name: name };
+            dispatch(signUp(formData, navigate, registerModal));
             setEmail('');
             setPassword('');
-
+            setConfirmPassword('');
+            setName('');
+            setUsername('');
         } catch (error){
             console.log(error);
         } finally {
             setIsLoading(false);
         }
-    }, [loginModal, email, password, navigate, dispatch]);
+    }, [registerModal, email, username, password, confirmPassword, name, dispatch, navigate]);
 
     const bodyContent = (
         <form className="flex flex-col gap-4" onSubmit={onSubmit}>
@@ -63,27 +57,49 @@ function LoginModal() {
                 value={email}
                 disabled={isLoading}
             />
+             <Input
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                maxLength={30}
+                disabled={isLoading}
+            />
+            <Input
+                placeholder="Username"
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+                maxLength={30}
+                disabled={isLoading}
+            />
             <Input
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
-                type='password'
-                maxLength={30}
                 value={password}
+                maxLength={30}
+                type='password'
+                disabled={isLoading}
+            />
+            <Input
+                placeholder="Confirm Password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword}
+                maxLength={30}
+                type='password'
                 disabled={isLoading}
             />
             <div className='flex flex-col gap-2 pt-10'>
                             <button type="submit" className='
-                                w-full
-                                font-semibold
-                                rounded-full
-                                text-xl
-                                text-[#0B0C10]
-                                px-4
-                                py-2
-                                transition
-                                hover:opacity-80
-                                bg-gradient-to-r from-cyan-500 to-cyan-800 '>
-                                    Sign In
+                            w-full
+                            font-semibold
+                            rounded-full
+                            text-xl
+                            px-4
+                            py-2
+                            text-[#0B0C10]
+                            transition
+                            hover:opacity-80
+                            bg-gradient-to-r from-cyan-500 to-cyan-800 '>
+                                Register
                 </button>
             </div>
         </form>
@@ -91,12 +107,12 @@ function LoginModal() {
 
     const footerContent = (
         <div className="text-neutral-400 text-center mt-4">
-            <p>Dont have an account?  
+            <p>Already have an account?  
                 <span
                     onClick={onToggle}
                     className="
                         text-white
-                        cursor-pointer"> Create an account</span>
+                        cursor-pointer"> Sign in</span>
             </p>
 
         </div>
@@ -106,9 +122,9 @@ function LoginModal() {
         <div>
             <Modal
                 disabled={isLoading}
-                isOpen={loginModal.isOpen}
-                title="Login"
-                onClose={loginModal.onClose}
+                isOpen={registerModal.isOpen}
+                title="Create An Account"
+                onClose={registerModal.onClose}
                 onSubmit={onSubmit}
                 body={bodyContent}
                 footer={footerContent}/>
@@ -116,4 +132,4 @@ function LoginModal() {
     )
 }
 
-export default LoginModal;
+export default RegisterModal;

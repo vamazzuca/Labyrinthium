@@ -52,7 +52,7 @@ function Modal({ isOpen, onClose, disabled, title, body, footer }) {
                         relative
                         flex
                         flex-col
-                        bg-[#0B0C10]
+                        bg-[#121212]
                         outline-none
                         focus:outline-none'>
                         

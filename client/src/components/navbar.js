@@ -10,6 +10,8 @@ import { BsCalendar2EventFill } from "react-icons/bs";
 import { FaMapLocation } from "react-icons/fa6";
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import useLoginModal from "../hooks/useLoginModel";
 
 
 
@@ -18,6 +20,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 function Navbar() {
     const [user, setUser] = useState(localStorage.getItem('profile-labyrinthium'));
     const [show, setShow] = useState(false)
+   
     const controlNavbar = () => {
         if (window.scrollY >= 100) {
             setShow(true)
@@ -28,10 +31,24 @@ function Navbar() {
 
     window.addEventListener('scroll', controlNavbar)
     const location = useLocation();
+    const dispatch = useDispatch();
+    const loginModal = useLoginModal();
     
     const navigate = useNavigate();
 
     const navigateModal = useNavigateModal();
+
+    const onClickLogin = useCallback(() => {
+        loginModal.onOpen();
+    }, [loginModal])
+
+    const Logout = useCallback(() => {
+        dispatch({ type: 'LOGOUT' });
+       
+        setUser(null)
+        navigate("/")
+        navigate(0)
+    }, [dispatch, navigate])
 
     const scrollToTop = () => {
         window.scrollTo({top: 0, behavior: 'smooth'})
@@ -55,7 +72,7 @@ function Navbar() {
         
         
         
-    }, [location, user?.token]);
+    }, [location, Logout, user?.token]);
 
     const navLinks = [
         {
@@ -80,7 +97,7 @@ function Navbar() {
     }, [navigateModal])
 
     return (
-        <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-[#9ea9bd] ease-in duration-300' : 'fixed top-0 left-0 right-0 z-30 ease-in duration-300'}>
+        <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-[#9ea9bd] ease-in duration-300' : 'fixed top-0 left-0 right-0 z-30 ease-in duration-300 '}>
             <div className={"flex flex-wrap items-center justify-between mr-auto ml-auto p-4 sm:px-8 max-w-[1900px] "}>
                 {show ? <button className="flex items-center gap-2 text-xl text-white " onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button> :
                     <button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40}/>Labyrinthium</button>}
@@ -98,7 +115,7 @@ function Navbar() {
                                 {<NavLink link={link.link} title={link.title} icon={link.icon }  color={"white"} />}
                             </li>
                         ))}
-                        <li><NavLink link={user ? "/profile": "/"} title={"Profile"} icon={<CgProfile size={30 }/>}  color={"white"} /></li>
+                        <li><NavLink onClick={user ? null : onClickLogin} link={user ? "/profile": null} title={"Profile"} icon={<CgProfile size={30 }/>}  color={"white"} /></li>
                 </ul>
 
             </div>
