@@ -4,7 +4,7 @@ import { AdvancedImage} from '@cloudinary/react';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 
 
-function Home() {
+function Home({isLoaded}) {
 
     const cld = new Cloudinary({
         cloud: {
@@ -22,7 +22,7 @@ function Home() {
                         <p className="text-gray-400 text-md md:text-xl font-medium">Search over 1000+ Canadian escape rooms</p>
                        
                         <div className="flex flex-col md:flex-row w-full gap-4">
-                            <Search />
+                            {isLoaded ? <Search /> : <></>}
                             <button className="hover:shadow-lg hover:shadow-purple-500/80 px-10 py-2 rounded-full cursor-pointer transition font-bold text-white bg-gradient-to-r from-cyan-500 to-cyan-800 ">Search</button>
                         </div>
                         

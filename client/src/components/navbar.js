@@ -12,12 +12,13 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import useLoginModal from "../hooks/useLoginModel";
+import Search from "./Search";
 
 
 
 
 
-function Navbar() {
+function Navbar({isLoaded}) {
     const [user, setUser] = useState(localStorage.getItem('profile-labyrinthium'));
     const [show, setShow] = useState(false)
    
@@ -97,17 +98,25 @@ function Navbar() {
     }, [navigateModal])
 
     return (
-        <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-[#9ea9bd] ease-in duration-300' : 'fixed top-0 left-0 right-0 z-30 ease-in duration-300 '}>
-            <div className={"flex flex-wrap items-center justify-between mr-auto ml-auto p-4 sm:px-8 max-w-[1900px] "}>
-                {show ? <button className="flex items-center gap-2 text-xl text-white " onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button> :
-                    <button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40}/>Labyrinthium</button>}
-                <div className="mobile-menu block lg:hidden">
+        <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-[#9ea9bd] ease-in duration-300' : 'fixed top-0 left-0 bg-purple-800 right-0 z-30 ease-in duration-300 '}>
+            <div className={"flex items-center justify-between mr-auto ml-auto p-4 sm:px-8 max-w-[1900px] "}>
+
+            <div className="flex gap-4 w-full">
+                    <button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button>
+                    <div className="flex flex-col md:flex-row w-3/5 gap-4">
+                        {isLoaded ? <Search />: <></>}
+                    <button className="hover:shadow-lg hover:shadow-purple-500/80 px-10 py-2 rounded-full cursor-pointer transition font-bold text-white bg-gradient-to-r from-cyan-500 to-cyan-800 ">Search</button>
+                    </div>
+            </div>    
+                
+            <div className="mobile-menu block lg:hidden">
                    
-                    <button aria-label="hamburger label" onClick={onClickNavigate} className={show? "flex items-center px-3 py-2 border rounded border-black text-black hover:text-gray-800 hover:border-gray-800" :  "flex items-center px-3 py-2 border rounded border-white text-white hover:text-gray-800 hover:border-gray-800"}>
-                            <RxHamburgerMenu className="h-5 w-5" />
-                        </button>
+                <button aria-label="hamburger label" onClick={onClickNavigate} className={show? "flex items-center px-3 py-2 border rounded border-black text-black hover:text-gray-800 hover:border-gray-800" :  "flex items-center px-3 py-2 border rounded border-white text-white hover:text-gray-800 hover:border-gray-800"}>
+                    <RxHamburgerMenu className="h-5 w-5" />
+                </button>
                     
-                </div>
+            </div>
+                
             <div className="menu hidden lg:block md:w-auto" id="navbar">
                 <ul className="flex p-4 lg:p-0 lg:flex-row lg:space-x-12 mt-0">
                         {navLinks.map((link, index) => (
