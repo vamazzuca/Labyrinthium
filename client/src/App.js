@@ -23,7 +23,7 @@ function App() {
       <Navbar isLoaded={isLoaded}/>
       <Routes>
         <Route path="/" element={<Home isLoaded={isLoaded} />}></Route>
-        <Route path="/map" element={<Map isLoaded={isLoaded}/>}></Route>
+        <Route path="/map/:searchLocation?" element={<Map isLoaded={isLoaded}/>}></Route>
         <Route path="*" element={<Navigate to='/' />}></Route>
         
       </Routes>

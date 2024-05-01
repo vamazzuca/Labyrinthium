@@ -13,6 +13,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import useLoginModal from "../hooks/useLoginModel";
 import Search from "./Search";
+import { Link } from "react-router-dom";
 
 
 
@@ -20,18 +21,30 @@ import Search from "./Search";
 
 function Navbar({isLoaded}) {
     const [user, setUser] = useState(localStorage.getItem('profile-labyrinthium'));
-    const [show, setShow] = useState(false)
-   
-    const controlNavbar = () => {
-        if (window.scrollY >= 100) {
-            setShow(true)
-        } else {
-            setShow(false)
-        }
-    }
-
-    window.addEventListener('scroll', controlNavbar)
+    const [show, setShow] = useState()
+    const [userLocation, setUserLocation] = useState(null)
     const location = useLocation();
+   
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY >= 150 && location.pathname !== "/") {
+                setShow(true); 
+            } else if (window.scrollY >= 150 && location.pathname === "/") {
+                setShow(true); 
+            } else if (window.scrollY <= 150 && location.pathname === "/") {
+                setShow(false); 
+            }
+        };
+    
+        handleScroll(); 
+        window.addEventListener('scroll', handleScroll); 
+    
+        return () => {
+            window.removeEventListener('scroll', handleScroll); 
+        };
+    }, [location]);
+
+    
     const dispatch = useDispatch();
     const loginModal = useLoginModal();
     
@@ -43,6 +56,15 @@ function Navbar({isLoaded}) {
         loginModal.onOpen();
     }, [loginModal])
 
+    useEffect(() => {
+        if (location.pathname === "/") {
+            setShow(false)
+        } else {
+            setShow(true)
+        }
+    }, [location])
+
+   
     const Logout = useCallback(() => {
         dispatch({ type: 'LOGOUT' });
        
@@ -55,7 +77,24 @@ function Navbar({isLoaded}) {
         window.scrollTo({top: 0, behavior: 'smooth'})
     }
 
-   
+    useEffect(() => {
+        getlocation()
+    }, [])
+    
+    const getlocation = async () => {
+        try {
+            await fetch("https://ipapi.co/json/")
+                .then((response) => response.json())
+                .then((data) => {
+                    
+                    setUserLocation(data)
+                    
+                })
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
 
     useEffect(() => {
         const token = user?.token;
@@ -75,6 +114,7 @@ function Navbar({isLoaded}) {
         
     }, [location, Logout, user?.token]);
 
+    const mapLocation = userLocation?.city + ", " + userLocation?.country_name;
     const navLinks = [
         {
             title: "Home",
@@ -83,7 +123,7 @@ function Navbar({isLoaded}) {
         },
         {
             title: "Map",
-            link: "/map",
+            link: `/map/${userLocation ? mapLocation: ""}`,
             icon: <FaMapLocation size={30} />
         },
         {
@@ -97,16 +137,17 @@ function Navbar({isLoaded}) {
         navigateModal.onOpen();
     }, [navigateModal])
 
+    
+   
     return (
-        <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-[#9ea9bd] ease-in duration-300' : 'fixed top-0 left-0 bg-purple-800 right-0 z-30 ease-in duration-300 '}>
+        <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-purple-900' : 'fixed top-0 left-0 right-0 z-30 ease-in duration-300 '}>
             <div className={"flex items-center justify-between mr-auto ml-auto p-4 sm:px-8 max-w-[1900px] "}>
 
             <div className="flex gap-4 w-full">
-                    <button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button>
-                    <div className="flex flex-col md:flex-row w-3/5 gap-4">
-                        {isLoaded ? <Search />: <></>}
-                    <button className="hover:shadow-lg hover:shadow-purple-500/80 px-10 py-2 rounded-full cursor-pointer transition font-bold text-white bg-gradient-to-r from-cyan-500 to-cyan-800 ">Search</button>
-                    </div>
+                    <Link to="/"><button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button></Link>
+                    {show ? <div className="flex flex-col md:flex-row w-3/5">
+                        {isLoaded ? <Search /> : <></>}
+                    </div> : <></>}
             </div>    
                 
             <div className="mobile-menu block lg:hidden">

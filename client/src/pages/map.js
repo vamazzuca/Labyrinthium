@@ -13,6 +13,7 @@ const containerStyle = {
 function Map({isLoaded}) {
     const mapRef = useRef();
     
+    const searchParams = new URLSearchParams(window.location.search);
     
     const center = {
         lat:  53.5375,
