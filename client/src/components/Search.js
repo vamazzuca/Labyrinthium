@@ -13,20 +13,19 @@ import {
     ComboboxOption,
   } from "@reach/combobox";
 import "@reach/combobox/styles.css";
-
-import { useRef } from 'react';
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useLocation } from "react-router";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router";
 
 
-function Search({disabled, defaultValue}) {
+
+function Search() {
     const inputRef = useRef(null);
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
-
-    location.pathname.split("/")
+    const searchParams = new URLSearchParams(window.location.search);
+    const [showSuggestions, setShowSuggestions] = useState(true);
+    
 
     const {
         ready,
@@ -41,6 +40,14 @@ function Search({disabled, defaultValue}) {
             },
         }
     });
+
+    useEffect(() => {
+        const loc = location.pathname.split("/")
+        if (loc[1] === "map") {
+            setValue(decodeURI(loc[2]))
+            setShowSuggestions(false);
+        }
+    }, [location, setValue])
     
     const onSubmit = (async (e) => {
         e.preventDefault();
@@ -65,6 +72,11 @@ function Search({disabled, defaultValue}) {
         inputRef.current.selectionEnd = 0;
     };
 
+    const handleInputChange = (e) => {
+        setValue(e.target.value);
+        setShowSuggestions(true); // Show suggestions when the user types in the input
+    };
+
     return (
         <form className="flex flex-col md:flex-row w-full gap-4" onSubmit={onSubmit}>
         <div className="flex z-30 w-full flex-1 rounded-full p-2 bg-white">
@@ -73,10 +85,8 @@ function Search({disabled, defaultValue}) {
                     <IoMdSearch size="24" color="black"/>
                 </div>
                 <input
-                    disabled={disabled}
                     onChange={(e) => setSearchValue(e.target.value)}
                     value={searchValue}
-                    defaultValue={defaultValue}
                     placeholder="Search..."
                     maxLength={250}
                     required={false}
@@ -94,28 +104,30 @@ function Search({disabled, defaultValue}) {
                 
                 <Combobox className="w-full" onSelect={handleSelect}>
                     <ComboboxInput
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
-                        disabled={!ready}
-                        placeholder="Location..."
-                        ref={inputRef}
-                        required={true}
-                        onFocus={handleFocus}
-                        className="
-                            w-full
-                            text-lg
-                            outline-none
-                            placeholder-black
-                            truncate
-                            "/>
-                    <ComboboxPopover className="z-30">
-                        <ComboboxList >
-                            {status === "OK" && 
-                                data.map(({ place_id, description }) => (
-                                    <ComboboxOption key={place_id } value={description} />
-                            ))}
-                        </ComboboxList>
-                    </ComboboxPopover>
+                            value={value}
+                            onChange={handleInputChange}
+                            disabled={!ready}
+                            placeholder="Location..."
+                            ref={inputRef}
+                            required={true}
+                            onFocus={handleFocus}
+                            className="
+                                w-full
+                                text-lg
+                                outline-none
+                                placeholder-black
+                                truncate
+                                "/>
+                    {showSuggestions && (
+                            <ComboboxPopover className="z-30">
+                                <ComboboxList >
+                                    {status === "OK" && 
+                                        data.map(({ place_id, description }) => (
+                                            <ComboboxOption key={place_id} value={description} />
+                                        ))}
+                                </ComboboxList>
+                            </ComboboxPopover>
+                        )}
                 </Combobox>
             </div>
             
