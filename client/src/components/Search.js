@@ -23,7 +23,6 @@ function Search() {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
-    const searchParams = new URLSearchParams(window.location.search);
     const [showSuggestions, setShowSuggestions] = useState(true);
     
 
@@ -43,10 +42,16 @@ function Search() {
 
     useEffect(() => {
         const loc = location.pathname.split("/")
-        if (loc[1] === "map") {
-            setValue(decodeURI(loc[2]))
+        const searchParams = new URLSearchParams(window.location.search);
+        const inputValue = searchParams.get('searchQuery') || '';
+        setSearchValue(inputValue)
+       
+        if (loc[1] === "map" && loc.length > 2) {
+        
+            setValue(decodeURI(loc[2]))   
+            
             setShowSuggestions(false);
-        }
+        } 
     }, [location, setValue])
     
     const onSubmit = (async (e) => {
@@ -67,14 +72,15 @@ function Search() {
     
     const handleFocus = () => {
         // Move the cursor to the beginning when the input field receives focus
-        
-        inputRef.current.selectionStart = 0;
-        inputRef.current.selectionEnd = 0;
+        const inputElement = inputRef.current;
+        if (inputElement) {
+            inputElement.setSelectionRange(0, 0);
+        }
     };
 
     const handleInputChange = (e) => {
-        setValue(e.target.value);
-        setShowSuggestions(true); // Show suggestions when the user types in the input
+        setShowSuggestions(true);
+        setValue(e.target.value);// Show suggestions when the user types in the input
     };
 
     return (
@@ -84,11 +90,11 @@ function Search() {
                 <div className="pl-2 items-center flex ">
                     <IoMdSearch size="24" color="black"/>
                 </div>
-                <input
+                    <input
                     onChange={(e) => setSearchValue(e.target.value)}
                     value={searchValue}
                     placeholder="Search..."
-                    maxLength={250}
+                    maxLength={250} 
                     required={false}
                     className="
                         w-full
@@ -110,7 +116,7 @@ function Search() {
                             placeholder="Location..."
                             ref={inputRef}
                             required={true}
-                            onFocus={handleFocus}
+                            onBlur={handleFocus}
                             className="
                                 w-full
                                 text-lg
