@@ -17,8 +17,6 @@ import { Link } from "react-router-dom";
 
 
 
-
-
 function Navbar({isLoaded}) {
     const [user, setUser] = useState(localStorage.getItem('profile-labyrinthium'));
     const [show, setShow] = useState()

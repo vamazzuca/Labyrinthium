@@ -13,20 +13,20 @@ function ListItem({room}) {
             <div className="flex flex-col justify-center gap-1 flex-1">
                 <h1 className="text-white font-bold">{room.name}</h1>
                 <p className="text-white line-clamp-3 text-sm">{room.description}</p>
-                <div className="flex gap-2 ">
-                    <div className="flex items-center text-white text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
+                <div className="flex gap-2">
+                    <div className="flex items-center text-white text-xs md:text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
                         <MdGroup color="#683293" size={20} />
                         <p>{room.minParty}-{room.maxParty}</p>
                     </div>
-                    <div className="flex items-center text-white text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
+                    <div className="flex items-center text-white text-xs md:text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
                         <IoMdTime color="#683293" size={20} />
-                        <p>{room.time}</p>
+                        <p className="line-clamp-1">{room.time}</p>
                     </div>
-                    <div className="flex items-center text-white text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
+                    <div className="flex items-center text-white text-xs md:text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
                         <IoExtensionPuzzle color="#683293" size={20} />
                         <p>{room.difficulty}</p>
                     </div>
-                    { room?.scareLevel ? <></> : <div className="flex items-center text-white text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
+                    { room?.scareLevel ? <></> : <div className="flex items-center text-white text-xs md:text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
                         <FaGhost color="#683293" size={20} />
                         <p>Scary</p>
                     </div>}

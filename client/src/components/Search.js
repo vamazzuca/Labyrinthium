@@ -15,6 +15,8 @@ import {
 import "@reach/combobox/styles.css";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
+import { reset } from '../actions/room';
+import { useDispatch } from "react-redux";
 
 
 
@@ -24,7 +26,7 @@ function Search() {
     const navigate = useNavigate();
     const location = useLocation();
     const [showSuggestions, setShowSuggestions] = useState(true);
-    
+    const dispatch = useDispatch()
 
     const {
         ready,
@@ -56,6 +58,7 @@ function Search() {
     
     const onSubmit = (async (e) => {
         e.preventDefault();
+        dispatch(reset())
         await getGeocode({ address: value }).then(
             results => {
                 const { lat, lng } = getLatLng(results[0]);

@@ -1,4 +1,4 @@
-const roomReducer = (state = { isLoading: true, rooms: [], room: []}, action) => {
+const roomReducer = (state = { isLoading: false, rooms: [], room: []}, action) => {
     switch (action.type) {
         case 'START_LOADING':
             return { ...state, isLoading: true }
@@ -9,6 +9,8 @@ const roomReducer = (state = { isLoading: true, rooms: [], room: []}, action) =>
             return { ...state, room: action.payload };
         case 'FETCH_ROOM_BY_SEARCH':
             return { ...state, rooms: action.payload };
+        case 'RESET':
+            return { ...state, rooms: [], room: [] };
     
         default:
             return state;

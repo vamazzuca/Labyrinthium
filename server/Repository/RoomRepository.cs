@@ -61,10 +61,11 @@ namespace server.Repository
 
             var groupedRooms = sortedRooms
                 .Where(room => room.Company != null)
-                .GroupBy(room => room.Company)
+                .GroupBy(room => new { room.Address, room.Company })
                 .Select(group => new CompanyRoom
                 {
-                     CompanyName = group.Key,
+                     Address = group.Key.Address,
+                     CompanyName = group.Key.Company,
                      Rooms = group.ToList()
                 }).ToList();
 
