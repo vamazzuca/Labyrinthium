@@ -1,4 +1,4 @@
-import { GoogleMap} from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindowF } from '@react-google-maps/api';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getRoomBySearch } from '../actions/room';
@@ -18,27 +18,53 @@ const containerStyle = {
 
 function Map({isLoaded}) {
     const mapRef = useRef();
+    const [clickedMarker, setClickedMarker] = useState(null);
+    const searchParams = new URLSearchParams(window.location.search);
+ 
+    const [center, setCenter] = useState({
+        lat:   searchParams.get("latitude") ? parseFloat(searchParams.get("latitude")) : 53.5375,
+        lng:   searchParams.get("longitude")? parseFloat(searchParams.get("longitude")) : -113.4923
+    });
     const dispatch = useDispatch();
     const { rooms, isLoading } = useSelector((state) => state.room)
     const location = useLocation();
     const [message, setMessage] = useState("")
-    const searchParams = new URLSearchParams(window.location.search);
+   
 
-    const center = {
-        lat:   searchParams.get("latitude") ? parseFloat(searchParams.get("latitude")) : 53.5375,
-        lng:   searchParams.get("longitude")? parseFloat(searchParams.get("longitude")) : -113.4923
-    };
+
+    const handleMarkerClick = useCallback((marker) => {
+        setClickedMarker(marker);
+        
+        mapRef.current?.panTo({
+            lat:   marker.latitude, 
+            lng:   marker.longitude
+        });
+    }, []);
+
+    const handleClose = useCallback(() => {
+        setClickedMarker(null);
+    }, []);
+
+  
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
+        setCenter({
+            lat:   searchParams.get("latitude") ? parseFloat(searchParams.get("latitude")) : 53.5375,
+            lng:   searchParams.get("longitude")? parseFloat(searchParams.get("longitude")) : -113.4923
+        })
         setMessage("")
+        dispatch(reset())
         if (searchParams.get("latitude") && searchParams.get("longitude")) {
-            dispatch(getRoomBySearch({ search: searchParams.get("searchQuery"), latitude: searchParams.get("latitude"), longitude: searchParams.get("longitude") }, setMessage)) 
-        } else {
-            dispatch(reset())
+            dispatch(getRoomBySearch({
+                search: searchParams.get("searchQuery"),
+                latitude: searchParams.get("latitude"),
+                longitude: searchParams.get("longitude")
+            }, setMessage)) 
         }
         
     }, [dispatch, location])
+
     
     const options = useMemo(() => ({
         mapId: "b181cac70f27f5e6",
@@ -48,13 +74,14 @@ function Map({isLoaded}) {
     
     const onLoad = useCallback((map) => (mapRef.current = map), [])
 
+
     return (
         <div className='absolute z-0 overflow-y-scroll bottom-0 h-[91vh] w-full grid grid-cols-3'>
            
             <div className='col-span-3 lg:col-span-1 flex items-center flex-col gap-4 order-last lg:order-first bg-[#121212]'>
             
                 {rooms.length === 0 && !isLoading && <div className='text-white mb-40 lg:mb-0 lg:mt-20 text-xl'>{message}</div>}
-             
+               
                 
                 {rooms && rooms.map((company, index) => {
                     return(<div key={index}>
@@ -84,11 +111,30 @@ function Map({isLoaded}) {
                         <GoogleMap
                             mapContainerStyle={containerStyle}
                             center={center}
-                            zoom={10}
+                            zoom={11}
                             options={options}
                             onLoad={onLoad}
+                            
                         >
-                            <></>
+                                {rooms.map((company, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    <Marker position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={() => handleMarkerClick(company.rooms[0])} icon={{ url: (require('../icons/marker.png')) }} >
+                                                    {clickedMarker === company.rooms[0] && (
+                                                        <InfoWindowF disableAutoPan={true} onClose={handleClose}>
+                                                            <p>{company.companyName}</p>
+                                                        </InfoWindowF>
+                                                        )}
+                                                    </Marker>
+                                                    
+                                                </div>  
+                                            )
+        
+                            
+                                        })}
+                           
+                            
+                            
                         </GoogleMap>
                     ) : <></>}
                 </div>

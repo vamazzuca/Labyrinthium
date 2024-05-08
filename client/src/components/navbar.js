@@ -121,7 +121,7 @@ function Navbar({isLoaded}) {
         },
         {
             title: "Map",
-            link: `/map/${userLocation ? mapLocation: ""}?searchQuery=&latitude=${userLocation?.latitude || 'none'}&longitude=${userLocation?.longitude || 'none'}`,
+            link: `/map/${userLocation ? mapLocation: ""}?searchQuery=&latitude=${userLocation?.latitude}&longitude=${userLocation?.longitude}`,
             icon: <FaMapLocation size={30} />
         },
         {

@@ -13,6 +13,7 @@ export const getRoomBySearch = (searchQuery, setMessage) => async (dispatch) => 
         dispatch({type: 'END_LOADING'})
     } catch (error) {
         console.log(error)
+        dispatch({type: 'END_LOADING'})
     }
 }
 
@@ -25,6 +26,7 @@ export const getRoom = (id) => async (dispatch) => {
         dispatch({type: 'END_LOADING'})
     } catch (error) {
         console.log(error.message)
+        dispatch({type: 'END_LOADING'})
     }
     
 }
