@@ -5,6 +5,7 @@ import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { useLocation } from 'react-router-dom';
 import ListItem from '../components/rooms/listItem';
 import FadeLoader from "react-spinners/FadeLoader"
+import { reset } from '../actions/room';
 
 import { APIProvider, Map, useMap, AdvancedMarker, InfoWindow, useAdvancedMarkerRef} from "@vis.gl/react-google-maps"
 
@@ -19,6 +20,7 @@ function MapRooms() {
     const { rooms, isLoading } = useSelector((state) => state.room)
     const location = useLocation();
     const [message, setMessage] = useState("")
+    const [markers, setMarkers] = useState({});
     
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
@@ -27,8 +29,9 @@ function MapRooms() {
             lng:   searchParams.get("longitude")? parseFloat(searchParams.get("longitude")) : -113.4923
         })
         
+        dispatch(reset())
+        setMarkers({})
         setMessage("")
-        
         if (searchParams.get("latitude") && searchParams.get("longitude")) {
             dispatch(getRoomBySearch({
                 search: searchParams.get("searchQuery"),
@@ -87,7 +90,7 @@ function MapRooms() {
                                 defaultCenter={center}
                                 options={options}
                                 >
-                                    <ClusterMarkers rooms={rooms}/>
+                                    <ClusterMarkers rooms={rooms} markers={markers} setMarkers={setMarkers}/>
                             </Map>
 
                             <MapHandler/>
@@ -105,9 +108,8 @@ function MapRooms() {
     )
 }
 
-const ClusterMarkers = ({ rooms }) => {
+const ClusterMarkers = ({ rooms, markers, setMarkers }) => {
     const map = useMap()
-    const [markers, setMarkers] = useState({});
     const clusterer = useRef(null);
 
     
@@ -125,8 +127,9 @@ const ClusterMarkers = ({ rooms }) => {
           };
         if (!clusterer.current) {
           clusterer.current = new MarkerClusterer({ map, renderer: coveredClusterRenderer });
-        }
-    }, [map]);
+        } 
+
+    }, [map, markers]);
 
     
     
@@ -135,10 +138,10 @@ const ClusterMarkers = ({ rooms }) => {
         clusterer.current?.addMarkers(Object.values(markers));
     }, [markers]);
     
-    const setMarkerRef = useCallback((marker, key) => {
+    const setMarkerRef = (marker, key) => {
         if (marker && markers[key]) return;
         if (!marker && !markers[key]) return;
-
+        
         setMarkers((prev) => {
             if (marker) {
               return { ...prev, [key]: marker };
@@ -148,14 +151,14 @@ const ClusterMarkers = ({ rooms }) => {
               return newMarkers;
             }
           });
-    }, [markers]);
+    };
 
 
     return (
         <>
             {rooms.map((company, index) => {
                 return (
-                    <MarkerWithInfoWindow key={index } company={company} setMarkerRef={setMarkerRef} index={index}/>
+                    <MarkerWithInfoWindow key={index} company={company} setMarkers={setMarkers} setMarkerRef={setMarkerRef} index={index}/>
                         )
             })}
         </>
@@ -179,11 +182,11 @@ const MarkerWithInfoWindow = ({ company, setMarkerRef, index }) => {
     }, []);
 
     useEffect(() => {
-        if (markerRef) {
-            setMarkerRef(markerRef, index);
-            infoRef(markerRef)
-        }
+        setMarkerRef(markerRef, index);
+        infoRef(markerRef)
+        
     }, [markerRef, index, setMarkerRef, infoRef]);
+    
 
     return (
         <>
