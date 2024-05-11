@@ -109,10 +109,8 @@ const ClusterMarkers = ({ rooms }) => {
     const map = useMap()
     const [markers, setMarkers] = useState({});
     const clusterer = useRef(null);
-    const [openMarkerId, setOpenMarkerId] = useState(null);
 
     
-  
     useEffect(() => {
         if (!map) return;
         const coveredClusterRenderer = {
@@ -137,7 +135,7 @@ const ClusterMarkers = ({ rooms }) => {
         clusterer.current?.addMarkers(Object.values(markers));
     }, [markers]);
     
-    const setMarkerRef = (marker, key) => {
+    const setMarkerRef = useCallback((marker, key) => {
         if (marker && markers[key]) return;
         if (!marker && !markers[key]) return;
 
@@ -150,15 +148,14 @@ const ClusterMarkers = ({ rooms }) => {
               return newMarkers;
             }
           });
-    };
+    }, [markers]);
+
 
     return (
         <>
             {rooms.map((company, index) => {
-                            return (
-                            
-                                <MarkerWithInfoWindow company={company} key={index} setMarkerRef={marker => setMarkerRef(marker, index)} index={index}/>
-                            
+                return (
+                    <MarkerWithInfoWindow key={index } company={company} setMarkerRef={setMarkerRef} index={index}/>
                         )
             })}
         </>
@@ -169,8 +166,9 @@ const ClusterMarkers = ({ rooms }) => {
 const MarkerWithInfoWindow = ({ company, setMarkerRef, index }) => {
 
     const [infoRef, marker] = useAdvancedMarkerRef();
+    const [markerRef, setMarkerRefInternal] = useState(null);
 
-    const [infoWindowShown, setInfoWindowShown] = useState(true);
+    const [infoWindowShown, setInfoWindowShown] = useState(false);
 
     const handleMarkerClick = useCallback(() =>
         setInfoWindowShown(isShown => !isShown)
@@ -180,11 +178,17 @@ const MarkerWithInfoWindow = ({ company, setMarkerRef, index }) => {
         setInfoWindowShown(false);
     }, []);
 
+    useEffect(() => {
+        if (markerRef) {
+            setMarkerRef(markerRef, index);
+            infoRef(markerRef)
+        }
+    }, [markerRef, index, setMarkerRef, infoRef]);
 
     return (
         <>
 
-            <AdvancedMarker ref={(marker) => {setMarkerRef(marker, index) }} position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={handleMarkerClick} >
+            <AdvancedMarker  ref={setMarkerRefInternal} position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={handleMarkerClick} >
                 <img src={require('../icons/marker.png')} alt='marker' width={36} height={36}></img>                
             </AdvancedMarker>
 
@@ -221,33 +225,47 @@ export default MapRooms;
 
 
 
-//{isLoaded ? (
- //   <GoogleMap
- //       mapContainerStyle={containerStyle}
- //       center={center}
- //       zoom={11}
- //       options={options}
- //       onLoad={onLoad}
- //       
- //   >
- //           {rooms.map((company, index) => {
- //                       return (
- //                           <div key={index}>
- //                               <Marker position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={() => handleMarkerClick(company.rooms[0])} icon={{ url: (require('../icons/marker.png')) }} >
-  //                              {clickedMarker === company.rooms[0] && (
-  //                                  <InfoWindowF disableAutoPan={true} onClose={handleClose}>
- //                                       <p>{company.companyName}</p>
- //                                   </InfoWindowF>
-  //                                  )}
-  //                              </Marker>
-  //                              
- //                           </div>  
-  //                      )
-//
-  //      
- //                   })}
- //      
- //       
- //       
- //   </GoogleMap>
-//) : <></>}
+/* const MarkerWithInfoWindow2 = ({ company, setMarkerRef, index }) => {
+
+
+    const handleMarkerClick = useCallback(() => {
+        const infoWindow = document.getElementById(`infoWindow-${index}`);
+        if (infoWindow) {
+            infoWindow.style.display = 'block';
+        }
+    }, [index]);
+
+    const handleInfoWindowClose = (event) => {
+        event.stopPropagation();
+        const infoWindow = document.getElementById(`infoWindow-${index}`);
+        if (infoWindow) {
+            infoWindow.style.display = 'none';
+        }
+    };
+
+    useEffect(() => {
+        const marker = document.getElementById(`marker-${index}`);
+        if (marker) {
+            marker.addEventListener('click', handleMarkerClick);
+
+            return () => {
+                marker.removeEventListener('click', handleMarkerClick);
+            };
+        }
+    }, [index, handleMarkerClick]);
+
+    return (
+        <>
+
+            <AdvancedMarker className="relative" ref={(marker) => setMarkerRef(marker, index)} position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={handleMarkerClick} >
+                <img  id={`marker-${index}`} src={require('../icons/marker.png')} alt='marker' width={36} height={36}></img>
+                <div id={`infoWindow-${index}`} className='absolute mt-[-70px] ml-[-60px] bg-white w-[160px] rounded-lg p-2 flex' style={{ display: 'none' }}>
+                    <p className='truncate'>{company.companyName}</p>
+                    <button className="text-xl " onClick={handleInfoWindowClose}>Close</button>
+                </div>
+            </AdvancedMarker>
+
+        
+        </>
+    )
+} */
