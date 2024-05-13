@@ -2,17 +2,17 @@ import { MdGroup } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import { IoExtensionPuzzle } from "react-icons/io5";
 import { FaGhost } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-
-function ListItem({room}) { 
+function ListItem({ room }) { 
     return (
-        <div className="flex gap-4 p-4 overflow-hidden cursor-pointer hover:bg-blue-300 hover:bg-opacity-10">
+        <Link className="flex gap-4 p-4 overflow-hidden cursor-pointer hover:bg-blue-300 hover:bg-opacity-10" to={`/room/${room.id}`}>
             <div className="w-1/4 flex items-center">
                 <img src={room.image} alt="escape room pic"></img>
             </div>
             <div className="flex flex-col justify-center gap-1 flex-1">
                 <h1 className="text-white font-bold">{room.name}</h1>
-                <p className="text-white line-clamp-3 text-sm">{room.description}</p>
+                <p className="text-white line-clamp-3 text-sm">{removeTextWithinAngleBrackets(room.description)}</p>
                 <div className="flex gap-2">
                     <div className="flex items-center text-white text-xs md:text-sm gap-1 bg-[#636363] p-1 bg-opacity-10 rounded-md">
                         <MdGroup color="#683293" size={20} />
@@ -32,8 +32,17 @@ function ListItem({room}) {
                     </div>}
                 </div>
             </div>
-        </div>
+        </Link>
     )
+}
+
+function removeTextWithinAngleBrackets(inputString) {
+    const angleBracketsRegex = /<[^>]*>/gi; // Matches anything within angle brackets, including the brackets themselves
+
+    
+    const cleanString = inputString.replace(angleBracketsRegex, '');
+
+    return cleanString;
 }
 
 

@@ -4,6 +4,7 @@ import Navbar from './components/navbar';
 import LoginModal from './components/modals/loginModal';
 import RegisterModal from './components/modals/registerModal';
 import MapRooms from './pages/map';
+import Room from './pages/room';
 import { useJsApiLoader } from '@react-google-maps/api';
 
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element={<Home isLoaded={isLoaded} />}></Route>
         <Route path="/map/:searchLocation?" element={<MapRooms isLoaded={isLoaded}/>}></Route>
         <Route path="*" element={<Navigate to='/' />}></Route>
+        <Route path="/room/:id" element={<Room/>}></Route>
         
       </Routes>
       <RegisterModal/>
