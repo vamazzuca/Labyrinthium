@@ -26,8 +26,8 @@ export const signIn = (formData, navigate, loginModal) => async (dispatch) =>{
         navigate("/")
         navigate(0)
     } catch (error) {
-        
-        notify(error.response.data.message || "An error occurred")
+        console.log(error)
+        notify(error?.response?.message || "An error occurred")
     }
 }
 
@@ -40,6 +40,7 @@ export const signUp = (formData, navigate, registerModal) => async (dispatch) =>
         navigate("/")
         navigate(0)
     } catch (error) {
-        notify(error.response.data.message || "An error occurred")
+        console.log(error)
+        notify(error?.response?.message || "An error occurred")
     }
 }
