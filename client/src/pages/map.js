@@ -28,7 +28,7 @@ function MapRooms() {
             lat:   searchParams.get("latitude") ? parseFloat(searchParams.get("latitude")) : 53.5375,
             lng:   searchParams.get("longitude")? parseFloat(searchParams.get("longitude")) : -113.4923
         })
-        
+
         dispatch(reset())
         setMarkers({})
         setMessage("")
@@ -216,8 +216,8 @@ const MapHandler = () => {
         if (!map) return; 
         const searchParams = new URLSearchParams(window.location.search);
         map.panTo({
-            lat: parseFloat(searchParams.get("latitude")),
-            lng: parseFloat(searchParams.get("longitude"))
+            lat:   searchParams.get("latitude") ? parseFloat(searchParams.get("latitude")) : 53.5375,
+            lng:   searchParams.get("longitude")? parseFloat(searchParams.get("longitude")) : -113.4923
         })
     }, [map, location])
 

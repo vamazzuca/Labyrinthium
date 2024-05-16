@@ -23,6 +23,7 @@ function Navbar({isLoaded}) {
     const [userLocation, setUserLocation] = useState(null)
     const location = useLocation();
    
+    console.log(user)
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY >= 150 && location.pathname !== "/") {
