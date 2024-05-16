@@ -45,7 +45,7 @@ namespace server.Controllers
                 return BadRequest(new { message = "Username already in use." });
 
             var user = new User { UserName = request.Username, Email = request.Email, Name = request.Name};
-           
+            Console.WriteLine("Test");
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
@@ -63,9 +63,8 @@ namespace server.Controllers
                 }
             }
             var token = GenerateJwtToken(user);
-            var userDto = new UserDto { Email = user.Email, UserName = user.UserName, Name = user.Name };
 
-            return Ok(new { user = userDto, token });
+            return Ok(new { user, token });
         }
 
         [HttpPost("signin")]
@@ -92,9 +91,8 @@ namespace server.Controllers
 
             var user = await _userManager.FindByEmailAsync(request.Email);
             var token = GenerateJwtToken(user);
-            var userDto = new UserDto { Email = user.Email, UserName = user.UserName, Name = user.Name };
 
-            return Ok(new { user = userDto, token });
+            return Ok(new { user, token });
         }
 
         [HttpGet("getUser")]

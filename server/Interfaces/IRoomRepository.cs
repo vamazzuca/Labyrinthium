@@ -11,11 +11,5 @@ namespace server.Interfaces
 
         bool RoomExists(int roomId);
         Task<List<CompanyRoom>> SearchRooms(string searchQuery, double latitude, double longitude);
-
-        Task MarkRoomAsCompleted(string userId, int roomId);
-        Task UnmarkRoomAsCompleted(string userId, int roomId);
-        Task<bool> IsRoomCompleted(string userId, int roomId);
-
-        Task<List<Room>> GetCompletedRoomsByUser(string userId);
     }
 }

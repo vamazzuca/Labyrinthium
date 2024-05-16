@@ -76,62 +76,9 @@ namespace server.Repository
 
         }
 
-        public async Task MarkRoomAsCompleted(string userId, int roomId)
-        {
-            var userRoom = await _context.UserRooms
-                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.EscapeRoomId == roomId);
-
-            if (userRoom == null)
-            {
-                userRoom = new UserRoom
-                {
-                    UserId = userId,
-                    EscapeRoomId = roomId,
-                    DateTime = DateTime.Now 
-                };
-                _context.UserRooms.Add(userRoom);
-            }
-            
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UnmarkRoomAsCompleted(string userId, int roomId)
-        {
-            var userRoom = await _context.UserRooms
-                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.EscapeRoomId == roomId);
-
-            if (userRoom != null)
-            {
-                _context.UserRooms.Remove(userRoom);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-
-        public async Task<bool> IsRoomCompleted(string userId, int roomId)
-        {
-            return await _context.UserRooms
-                .AnyAsync(ur => ur.UserId == userId && ur.EscapeRoomId == roomId);
-        }
-
-       
-
         public bool RoomExists(int roomId)
         {
            return _context.Rooms.Any(p => p.Id == roomId);
-        }
-
-        public async Task<List<Room>> GetCompletedRoomsByUser(string userId)
-        {
-            var completedRoomIds = await _context.UserRooms
-                .Where(ur => ur.UserId == userId)
-                .Select(ur => ur.EscapeRoomId)
-                .ToListAsync();
-
-            return await _context.Rooms
-                .Where(room => completedRoomIds.Contains(room.Id))
-                .ToListAsync();
         }
     }
 }
