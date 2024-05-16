@@ -59,5 +59,37 @@ namespace server.Controllers
 
             return Ok(rooms);
         }
+
+        [HttpPost("markCompleted/{userId}/{roomId}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> MarkRoomAsCompleted(string userId, int roomId)
+        {
+            await _roomRepository.MarkRoomAsCompleted(userId, roomId);
+            return Ok();
+        }
+
+        [HttpPost("unmarkCompleted/{userId}/{roomId}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> UnmarkRoomAsCompleted(string userId, int roomId)
+        {
+            await _roomRepository.UnmarkRoomAsCompleted(userId, roomId);
+            return Ok();
+        }
+
+        [HttpGet("isCompleted/{userId}/{roomId}")]
+        [ProducesResponseType(200, Type = typeof(bool))]
+        public async Task<IActionResult> IsRoomCompleted(string userId, int roomId)
+        {
+            var isCompleted = await _roomRepository.IsRoomCompleted(userId, roomId);
+            return Ok(isCompleted);
+        }
+
+        [HttpGet("completedRooms/{userId}")]
+        [ProducesResponseType(200, Type = typeof(List<Room>))]
+        public async Task<IActionResult> GetCompletedRoomsByUser(string userId)
+        {
+            var completedRooms = await _roomRepository.GetCompletedRoomsByUser(userId);
+            return Ok(completedRooms);
+        }
     }
 }
