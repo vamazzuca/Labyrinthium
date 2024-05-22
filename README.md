@@ -1,11 +1,9 @@
 # Labyrinthium
  
  Description  
- • Tabletop Finder is a full-stack web application designed to connect board game enthusiasts, allowing them to discover and create tabletop gaming events in their city.      
- • Users can create a profile account and search for Tabletop events in their city to join.        
- • Frontend built with React, and Tailwind for a modern and customizable design.    
- • REST API Backend built with NodeJS and Express, providing a scalable and efficient server environment.     
- • Used MongoDB database for storing event and profile information.   
+• Labyrinthium is a full-stack web application utilizing the Google Maps API to help users discover and explore local Canadian escape rooms, complete with user profiles for tracking completed rooms.  
+• Developed a responsive frontend using React and Tailwind, featuring a robust search engine that allows users to find escape rooms based on location and other search criteria, marking them on an interactive map for easy discovery.  
+• Implemented a scalable .NET backend with MySQL for secure data management, and integrated user authentication and tracking, enabling users to log in and track their completed escape rooms on their personalized profiles.  
 
  Tech Stack  
  • React  
