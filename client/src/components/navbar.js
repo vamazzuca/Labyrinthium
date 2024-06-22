@@ -6,7 +6,7 @@ import useNavigateModal from '../hooks/useNavigateModal'
 import { GiMazeSaw } from "react-icons/gi";
 import { IoMdHome } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-import { BsCalendar2EventFill } from "react-icons/bs";
+//import { BsCalendar2EventFill } from "react-icons/bs";
 import { FaMapLocation } from "react-icons/fa6";
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -23,7 +23,7 @@ function Navbar({isLoaded}) {
     const [userLocation, setUserLocation] = useState(null)
     const location = useLocation();
    
-    console.log(user)
+    
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY >= 150 && location.pathname !== "/") {
@@ -125,11 +125,6 @@ function Navbar({isLoaded}) {
             link: `/map/${userLocation ? mapLocation: ""}?searchQuery=&latitude=${userLocation?.latitude}&longitude=${userLocation?.longitude}`,
             icon: <FaMapLocation size={30} />
         },
-        {
-            title: "Events",
-            link: "/events",
-            icon: <BsCalendar2EventFill size={30} />
-        }
     ]
 
     const onClickNavigate = useCallback(() => {
@@ -137,10 +132,10 @@ function Navbar({isLoaded}) {
     }, [navigateModal])
 
     
-   
+    
     return (
         <nav className={show ? 'fixed top-0 left-0 right-0 z-30 bg-purple-900' : 'fixed top-0 left-0 right-0 z-30 ease-in duration-300 '}>
-            <div className={"flex items-center justify-between mr-auto ml-auto p-4 sm:px-8 max-w-[1900px] "}>
+            <div className={"flex items-center justify-between mr-auto ml-auto p-6 sm:px-8 max-w-[1900px] "}>
 
             <div className="flex gap-4 w-full">
                     <Link to="/"><button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button></Link>
@@ -164,7 +159,7 @@ function Navbar({isLoaded}) {
                                 {<NavLink link={link.link} title={link.title} icon={link.icon }  color={"white"} />}
                             </li>
                         ))}
-                        <li><NavLink onClick={user ? null : onClickLogin} link={user ? "/profile": null} title={"Profile"} icon={<CgProfile size={30 }/>}  color={"white"} /></li>
+                        <li><NavLink onClick={user ? null : onClickLogin} link={user ? `/profile/${user?.user?.userName}` : null} title={user ? <p className="truncate">{user?.user?.userName}</p> : "Profile"} icon={<CgProfile size={30 }/>}  color={"white"} /></li>
                 </ul>
 
             </div>
@@ -179,3 +174,10 @@ function Navbar({isLoaded}) {
 
 
 export default Navbar;
+
+
+//{
+//    title: "Events",
+//    link: "/events",
+ //   icon: <BsCalendar2EventFill size={30} />
+//}

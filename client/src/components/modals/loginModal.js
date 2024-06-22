@@ -61,6 +61,7 @@ function LoginModal() {
                 type='email'
                 maxLength={30}
                 value={email}
+                required={true}
                 disabled={isLoading}
             />
             <Input
@@ -68,6 +69,7 @@ function LoginModal() {
                 onChange={(e) => setPassword(e.target.value)}
                 type='password'
                 maxLength={30}
+                required={true}
                 value={password}
                 disabled={isLoading}
             />

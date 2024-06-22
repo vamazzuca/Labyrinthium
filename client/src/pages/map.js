@@ -6,8 +6,9 @@ import { useLocation } from 'react-router-dom';
 import ListItem from '../components/rooms/listItem';
 import FadeLoader from "react-spinners/FadeLoader"
 import { reset } from '../actions/room';
+import { IoMdClose } from "react-icons/io";
 
-import { APIProvider, Map, useMap, AdvancedMarker, InfoWindow, useAdvancedMarkerRef} from "@vis.gl/react-google-maps"
+import { APIProvider, Map, useMap, AdvancedMarker} from "@vis.gl/react-google-maps"
 
 
 function MapRooms() {
@@ -52,7 +53,7 @@ function MapRooms() {
    
 
     return (
-        <div className='absolute z-0 overflow-y-scroll bottom-0 h-[91vh] w-full grid grid-cols-3'>
+        <div className='absolute z-0 overflow-y-scroll bottom-0 h-[92vh] w-full grid grid-cols-3'>
            
             <div className='col-span-3 lg:col-span-1 flex items-center flex-col gap-4 order-last lg:order-first bg-[#121212]'>
             
@@ -82,9 +83,9 @@ function MapRooms() {
                 
             </div>
             <div className='col-span-3 z-10 relative h-[25rem] lg:h-[91vh] lg:col-span-2'>
-                <div className='lg:w-4/6 w-full h-full lg:h-[91vh] lg:fixed'>
+                <div className='lg:w-4/6 w-full h-full lg:h-[92vh] lg:fixed'>
                     <div style={{height: "100%", width: "100%"}}>
-                        <APIProvider apiKey={"AIzaSyAgDm2VJaq3_K8MqJh4Kfg9cP_BWA5a3xs"}>
+                        <APIProvider  apiKey={process.env.REACT_APP_GOOGLE_KEY}>
                             <Map    
                                 defaultZoom={11}
                                 defaultCenter={center}
@@ -168,40 +169,51 @@ const ClusterMarkers = ({ rooms, markers, setMarkers }) => {
 
 const MarkerWithInfoWindow = ({ company, setMarkerRef, index }) => {
 
-    const [infoRef, marker] = useAdvancedMarkerRef();
-    const [markerRef, setMarkerRefInternal] = useState(null);
+    
 
-    const [infoWindowShown, setInfoWindowShown] = useState(false);
+    const handleMarkerClick = useCallback(() => {
+        const infoWindow = document.getElementById(`infoWindow-${index}`);
+        if (infoWindow) {
+            infoWindow.style.display = 'block';
+        }
+    }, [index]);
 
-    const handleMarkerClick = useCallback(() =>
-        setInfoWindowShown(isShown => !isShown)
-      , []);
-
-    const handleClose = useCallback(() => {
-        setInfoWindowShown(false);
-    }, []);
+    const handleClose = (event) => {
+        event.stopPropagation();
+        const infoWindow = document.getElementById(`infoWindow-${index}`);
+        if (infoWindow) {
+            infoWindow.style.display = 'none';
+        }
+    };
 
     useEffect(() => {
-        setMarkerRef(markerRef, index);
-        infoRef(markerRef)
-        
-    }, [markerRef, index, setMarkerRef, infoRef]);
+        const marker = document.getElementById(`marker-${index}`);
+        if (marker) {
+            marker.addEventListener('click', handleMarkerClick);
+
+            return () => {
+                marker.removeEventListener('click', handleMarkerClick);
+            };
+        }
+    }, [index, handleMarkerClick]);
     
 
     return (
         <>
 
-            <AdvancedMarker  ref={setMarkerRefInternal} position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={handleMarkerClick} >
-                <img src={require('../icons/marker.png')} alt='marker' width={36} height={36}></img>                
+            <AdvancedMarker className="relative" ref={(marker) => setMarkerRef(marker, index)} position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={handleMarkerClick} >
+                <img  className="z-10" id={`marker-${index}`} src={require('../icons/marker.png')} alt='marker' width={36} height={36}></img>   
+                <div id={`infoWindow-${index}`} className='absolute w-auto bg-white rounded-lg p-2 pt-1 flex z-20' style={{ display: 'none', bottom: '45px', left: '50%', transform: 'translateX(-50%)' }}>  
+                    <div className='w-full flex justify-end '>
+                        <button onClick={handleClose}><IoMdClose size={10 } /></button>
+                    </div>
+                    <p className='truncate text-sm text-center'>{company.companyName}</p>
+                    
+                </div>
+                
             </AdvancedMarker>
 
-            {infoWindowShown &&(
-                <InfoWindow
-                    anchor={marker}
-                    onClose={handleClose}>
-                    {company.companyName}
-                </InfoWindow>
-            )}
+            
         </>
     )
 }
@@ -272,3 +284,46 @@ export default MapRooms;
         </>
     )
 } */
+
+
+    /* const MarkerWithInfoWindow = ({ company, setMarkerRef, index }) => {
+
+        const [infoRef, marker] = useAdvancedMarkerRef();
+        const [markerRef, setMarkerRefInternal] = useState(null);
+    
+        const [infoWindowShown, setInfoWindowShown] = useState(false);
+    
+        const handleMarkerClick = useCallback(() =>
+            setInfoWindowShown(isShown => !isShown)
+          , []);
+    
+        const handleClose = useCallback(() => {
+            setInfoWindowShown(false);
+        }, []);
+    
+        useEffect(() => {
+            setMarkerRef(markerRef, index);
+            infoRef(markerRef)
+            
+        }, [markerRef, index, setMarkerRef, infoRef]);
+        
+    
+        return (
+            <>
+    
+                <AdvancedMarker  ref={setMarkerRefInternal} position={{ lat: company.rooms[0].latitude, lng: company.rooms[0].longitude }} onClick={handleMarkerClick} >
+                    <img src={require('../icons/marker.png')} alt='marker' width={36} height={36}></img>   
+                    <div>{company.companyName}</div>
+                </AdvancedMarker>
+    
+                {infoWindowShown &&(
+                    <InfoWindow
+                        anchor={marker}
+                        headerDisabled={true}
+                        onClose={handleClose}>
+                        {company.companyName}
+                    </InfoWindow>
+                )}
+            </>
+        )
+    } */

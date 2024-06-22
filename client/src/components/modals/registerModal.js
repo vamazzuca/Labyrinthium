@@ -54,6 +54,7 @@ function RegisterModal() {
                 onChange={(e) => setEmail(e.target.value)}
                 type='email'
                 maxLength={30}
+                required={true}
                 value={email}
                 disabled={isLoading}
             />
@@ -61,6 +62,7 @@ function RegisterModal() {
                 placeholder="Name"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
+                required={true}
                 maxLength={30}
                 disabled={isLoading}
             />
@@ -68,6 +70,7 @@ function RegisterModal() {
                 placeholder="Username"
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
+                required={true}
                 maxLength={30}
                 disabled={isLoading}
             />
@@ -75,6 +78,7 @@ function RegisterModal() {
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
+                required={true}
                 maxLength={30}
                 type='password'
                 disabled={isLoading}
@@ -83,6 +87,7 @@ function RegisterModal() {
                 placeholder="Confirm Password"
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 value={confirmPassword}
+                required={true}
                 maxLength={30}
                 type='password'
                 disabled={isLoading}

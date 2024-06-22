@@ -22,10 +22,16 @@ export const getRoom = (id) => async (dispatch) => {
         dispatch({type: 'START_LOADING'})
         const { data } = await api.fetchRoom(id)
         
-        dispatch({ type: 'FETCH_ROOM', payload: data })
+        if (!data) {
+            dispatch({ type: 'ERROR' });
+        } else {
+            dispatch({ type: 'FETCH_ROOM', payload: data })
+        }
+        
         dispatch({type: 'END_LOADING'})
     } catch (error) {
         console.log(error.message)
+        dispatch({ type: 'ERROR' });
         dispatch({type: 'END_LOADING'})
     }
     

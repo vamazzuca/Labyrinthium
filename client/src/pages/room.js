@@ -12,23 +12,31 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import Footer from '../components/footer';
+import { useNavigate } from 'react-router-dom';
 
 
 function Room() {
 
     const { id } = useParams()
     const dispatch = useDispatch()
+    const navigate = useNavigate();
     
     
-    const { room, isLoading} = useSelector((state) => state.room)
+    const { room, isLoading, error} = useSelector((state) => state.room)
 
     useEffect(() => {
         dispatch(getRoom(id))
     }, [dispatch, id])
 
+    useEffect(() => {
+        if (error) {
+          navigate('/home'); 
+        }
+      }, [error, navigate]);
+
     return (
-        <div className='h-screen w-full flex flex-col items-center'>
-            {isLoading ? <div className='mt-32 mb-[46rem]'><FadeLoader size={30 } color="#683293"/></div> : <div className='mt-[8rem] px-8 pt-8 pb-36 max-w-[1300px] w-full md:mt-[10rem] flex flex-col'>
+        <div className='h-screen w-full flex flex-col items-center justify-between'>
+            {isLoading ? <div className='mt-32 mb-[46rem]'><FadeLoader size={30 } color="#683293"/></div> : <div className='mt-[8rem] px-8 pt-8 max-w-[1300px] w-full md:mt-[10rem] flex flex-col'>
                 <div className='flex md:flex-row gap-8 flex-col'>
                     <div className="md:w-1/3 flex items-center">
                         <img src={room.image} alt="escape room pic"></img>

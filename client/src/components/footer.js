@@ -34,11 +34,12 @@ function Footer({link}) {
                         <div className=" hidden sm:flex flex-auto w-auto ">
                             <ul className="w-[13rem] flex flex-col gap-2 list-none px-[1.25rem] border-l-2 border-[#581C87] text-white font-semibold">
                                 <Link onClick={handleLink} to={"/"}><li className='cursor-pointer'>Home</li></Link>
-                                <Link onClick={handleLink} to={"/map"}><li className='cursor-pointer'>Map</li></Link>
+                                
                                 
                             </ul>
-                            <ul className="w-[13rem] flex flex-col gap-2 list-none px-[1.25rem] border-l-2 border-[#581C87] text-white font-semibold">
-                                <Link onClick={handleLink} to={"/events"}><li className='cursor-pointer'>Events</li></Link>
+                        <ul className="w-[13rem] flex flex-col gap-2 list-none px-[1.25rem] border-l-2 border-[#581C87] text-white font-semibold">
+                                <Link onClick={handleLink} to={"/map"}><li className='cursor-pointer'>Map</li></Link>
+                               
                                 
                                 
                             </ul>
@@ -58,3 +59,5 @@ function Footer({link}) {
 
 
 export default Footer;
+
+//<Link onClick={handleLink} to={"/events"}><li className='cursor-pointer'>Events</li></Link>

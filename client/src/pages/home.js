@@ -3,6 +3,10 @@ import {Cloudinary} from "@cloudinary/url-gen";
 import { AdvancedImage} from '@cloudinary/react';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { useEffect } from "react";
+import { cities } from "../data/cities";
+import City from "../components/city";
+import Footer from "../components/footer";
+
 
 function Home({isLoaded}) {
 
@@ -37,7 +41,18 @@ function Home({isLoaded}) {
                 </div>
             </div>
 
-            <div className="w-full h-[40rem]"></div>
+            <div className="w-full px-10 pt-10">
+                <h1 className="font-bold text-white text-3xl ml-4 sm:ml-10">Popular Canadian Cities</h1>
+            </div>
+            <div className=" p-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {cities.map((city, index) => {
+                    return (
+                        <City city={city} key={index } />
+                    )   
+                })}
+            </div>
+
+            <Footer/>
         </div>
     )
 }

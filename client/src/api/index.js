@@ -6,4 +6,7 @@ export const signIn = (formData) => API.post('/api/User/signin', formData);
 export const signUp = (formData) => API.post('/api/User/signup', formData);
 
 export const fetchRoomsBySearch = (searchQuery) => API.get(`api/Room/search?latitude=${searchQuery.latitude}&longitude=${searchQuery.longitude}&query=${searchQuery.search}`)
-export const fetchRoom = (id) => API.get(`api/Room/${id}`)
+export const fetchRoom = (id) => API.get(`/api/Room/${id}`)
+
+export const getUser = (username) => API.get(`/api/User/getUser?username=${username}`)
+export const updateUser = (user) => API.post(`/api/User/updateUser`, user)

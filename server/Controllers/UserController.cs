@@ -65,36 +65,65 @@ namespace server.Controllers
             var token = GenerateJwtToken(user);
             var userDto = new UserDto { Email = user.Email, UserName = user.UserName, Name = user.Name };
 
-            return Ok(new { user = userDto, token });
+           
+             return Ok(new { user = userDto, token });
+            
+            
+               
         }
 
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
-            var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: false);
-
-            if (result.IsLockedOut)
-            {
-                return BadRequest(new { message = "Account is locked out." });
-            }
-
-            if (!result.Succeeded)
-            {
-                
-                var emailCheck = await _userManager.FindByEmailAsync(request.Email);
-                if (emailCheck == null)
-                {
-                    return NotFound(new { message = "User Not Found." });
-                }
-    
-                return Unauthorized(new { message = "Incorrect password." });
-            }
-
+           
             var user = await _userManager.FindByEmailAsync(request.Email);
-            var token = GenerateJwtToken(user);
-            var userDto = new UserDto { Email = user.Email, UserName = user.UserName, Name = user.Name };
+            if (user == null)
+            {
+                return NotFound(new { message = "User Not Found." });
+            }
 
-            return Ok(new { user = userDto, token });
+
+            if (user != null)
+            {
+                //User is found, check password
+                var passwordCheck = await _userManager.CheckPasswordAsync(user, request.Password);
+                if (passwordCheck)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
+
+                    if (result.Succeeded)
+                    {
+                        var token = GenerateJwtToken(user);
+                        var userDto = new UserDto { Email = user.Email, UserName = user.UserName, Name = user.Name };
+
+                        return Ok(new { user = userDto, token });
+                    }
+
+                    if (result.IsLockedOut)
+                    {
+                        return BadRequest(new { message = "Account is locked out." });
+                    }
+
+                    if (!result.Succeeded)
+                    {
+                        return Unauthorized(new { message = "Could not Login" });
+                    }
+                }
+
+                return BadRequest(new { message = "Incorrect password." });
+            }
+
+            return BadRequest(new { message = "An Error occured" });
+
+
+
+
+
+
+
+
+
+
         }
 
         [HttpGet("getUser")]
@@ -144,7 +173,7 @@ namespace server.Controllers
                     location = updatedUser.Location
                 };
 
-                return Ok(result);
+                return Ok(new { result });
             
         }
         private string GenerateJwtToken(User user)

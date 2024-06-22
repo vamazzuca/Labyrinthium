@@ -88,7 +88,7 @@ function Search() {
 
     return (
         <form className="flex flex-col md:flex-row w-full gap-4" onSubmit={onSubmit}>
-        <div className="flex z-30 w-full flex-1 rounded-full p-2 bg-white">
+        <div className="flex w-full flex-1 rounded-full p-2 bg-white">
             <div className="flex w-full gap-2">
                 <div className="pl-2 items-center flex ">
                     <IoMdSearch size="24" color="black"/>
