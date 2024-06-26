@@ -94,7 +94,7 @@ namespace server.Controllers
                     if (result.Succeeded)
                     {
                         var token = GenerateJwtToken(user);
-                        var userDto = new UserDto { Email = user.Email, UserName = user.UserName, Name = user.Name };
+                        var userDto = new UserDto { Id = user.Id, Email = user.Email, UserName = user.UserName, Name = user.Name };
 
                         return Ok(new { user = userDto, token });
                     }

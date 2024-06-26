@@ -1,7 +1,7 @@
 
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getRoom } from '../actions/room';
+import { getRoom, markComplete, unmarkCompleted, isCompleted } from '../actions/room';
 import { useSelector, useDispatch } from "react-redux";
 import FadeLoader from "react-spinners/FadeLoader"
 import { MdGroup } from "react-icons/md";
@@ -22,7 +22,7 @@ function Room() {
     const navigate = useNavigate();
     
     
-    const { room, isLoading, error} = useSelector((state) => state.room)
+    const { room, isLoading, error, completed} = useSelector((state) => state.room)
 
     useEffect(() => {
         dispatch(getRoom(id))
@@ -32,7 +32,26 @@ function Room() {
         if (error) {
           navigate('/home'); 
         }
-      }, [error, navigate]);
+    }, [error, navigate]);
+    
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('profile-labyrinthium'));
+        dispatch(isCompleted({ userId: user.user.id, roomId: id }))
+    }, [dispatch, id])
+
+    const markCompleteRoom = () => {
+        const user = JSON.parse(localStorage.getItem('profile-labyrinthium'));
+        if (user) {
+            dispatch(markComplete({ userId: user.user.id, roomId: id }))
+        }
+    }
+
+    const unmarkCompleteRoom = () => {
+        const user = JSON.parse(localStorage.getItem('profile-labyrinthium'));
+        if (user) {
+            dispatch(unmarkCompleted({ userId: user.user.id, roomId: id }))
+        }
+    }
 
     return (
         <div className='h-screen w-full flex flex-col items-center justify-between'>
@@ -71,7 +90,20 @@ function Room() {
                 <div className='flex py-12 flex-col md:flex-row gap-14'>
                     <div className='w-full md:w-3/5 h-full flex gap-6 flex-col text-white text-lg'>
                         <div>
-                            <button className="
+                            {completed ? <button onClick={unmarkCompleteRoom} className="
+                                    bottom-0
+                                    z-1
+                                    right-0
+                                    hover:shadow-lg hover:shadow-purple-500/80
+                                    bg-[#121212]                               
+                                    text-cyan-500
+                                    border-cyan-500
+                                    border-2
+                                    font-bold
+                                    py-2
+                                    px-6
+                                    rounded-full">Completed</button> :
+                                <button onClick={markCompleteRoom} className="
                                     bottom-0
                                     z-1
                                     right-0
@@ -81,7 +113,8 @@ function Room() {
                                     font-bold
                                     py-2
                                     px-6
-                                    rounded-full">Mark as completed</button>
+                                    rounded-full">Mark as completed</button>}
+                            
                         </div>
                         <p className='pb-8 pt-4'>{room.description}</p>
                     </div>

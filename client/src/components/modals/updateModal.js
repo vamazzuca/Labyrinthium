@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios"
 import MoonLoader from "react-spinners/MoonLoader";
 import { updateUser, getUserUpdate } from "../../actions/user";
+import { useNavigate} from 'react-router-dom';
 
 function UpdateModal() {
     const updateModal = useUpdateModal();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     const [bio, setBio] = useState('');
     const [location, setLocation] = useState('');
@@ -59,14 +61,21 @@ function UpdateModal() {
         }
     }, [updateData]);
 
-   console.log(updateData)
+    const Logout = useCallback(() => {
+        dispatch({ type: 'LOGOUT' });
+       
+        navigate("/")
+        navigate(0)
+    }, [dispatch, navigate])
+
+  
     const onSubmit = useCallback(async (e) => {
         try {
             setIsLoading(true);
             e.preventDefault();
             const formData = { id: updateData.result.id, username: username, name: name, email: updateData.result.email, photo: imageURL, bio: bio, location: location };
             dispatch(updateUser(formData, updateModal));
-            localStorage.setItem('profile-labyrinthium', JSON.stringify({user: {name: name, email: updateData.result.email, userName: username}, token: user.token}))
+            localStorage.setItem('profile-labyrinthium', JSON.stringify({user: {id: updateData.result.id, name: name, email: updateData.result.email, userName: username}, token: user.token}))
         } catch (error){
             console.log(error);
         } finally {
@@ -149,7 +158,7 @@ function UpdateModal() {
             </form>
 
             <div className='flex flex-col w-full gap-2 pb-10'>
-                            <button className='
+                            <button onClick={Logout} className='
                             w-full
                             font-semibold
                             rounded-full

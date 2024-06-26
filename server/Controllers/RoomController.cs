@@ -65,7 +65,7 @@ namespace server.Controllers
         public async Task<IActionResult> MarkRoomAsCompleted(string userId, int roomId)
         {
             await _roomRepository.MarkRoomAsCompleted(userId, roomId);
-            return Ok();
+            return Ok(200);
         }
 
         [HttpPost("unmarkCompleted/{userId}/{roomId}")]
@@ -73,7 +73,7 @@ namespace server.Controllers
         public async Task<IActionResult> UnmarkRoomAsCompleted(string userId, int roomId)
         {
             await _roomRepository.UnmarkRoomAsCompleted(userId, roomId);
-            return Ok();
+            return Ok(200);
         }
 
         [HttpGet("isCompleted/{userId}/{roomId}")]
