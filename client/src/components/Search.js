@@ -13,10 +13,11 @@ import {
     ComboboxOption,
   } from "@reach/combobox";
 import "@reach/combobox/styles.css";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { reset } from '../actions/room';
 import { useDispatch } from "react-redux";
+import useSearchModal from "../hooks/useSearchModel";
 
 
 
@@ -27,6 +28,12 @@ function Search() {
     const location = useLocation();
     const [showSuggestions, setShowSuggestions] = useState(true);
     const dispatch = useDispatch()
+
+    const searchModal = useSearchModal();
+
+    const onClickSearch = useCallback(() => {
+        searchModal.onClose();
+    }, [searchModal])
 
     const {
         ready,
@@ -59,6 +66,7 @@ function Search() {
     const onSubmit = (async (e) => {
         e.preventDefault();
         dispatch(reset())
+        onClickSearch();
         await getGeocode({ address: value }).then(
             results => {
                 const { lat, lng } = getLatLng(results[0]);
@@ -128,7 +136,7 @@ function Search() {
                                 truncate
                                 "/>
                     {showSuggestions && (
-                            <ComboboxPopover className="z-30">
+                            <ComboboxPopover className="z-50">
                                 <ComboboxList >
                                     {status === "OK" && 
                                         data.map(({ place_id, description }) => (

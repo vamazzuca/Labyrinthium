@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { getRoom, markComplete, unmarkCompleted, isCompleted } from '../actions/room';
 import { useSelector, useDispatch } from "react-redux";
@@ -13,16 +13,22 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import Footer from '../components/footer';
 import { useNavigate } from 'react-router-dom';
+import useLoginModal from '../hooks/useLoginModel';
 
 
 function Room() {
 
-    const { id } = useParams()
-    const dispatch = useDispatch()
+    const { id } = useParams();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     
+    const loginModal = useLoginModal();
     
-    const { room, isLoading, error, completed} = useSelector((state) => state.room)
+    const { room, isLoading, error, completed } = useSelector((state) => state.room)
+    
+    const onClickLogin = useCallback(() => {
+        loginModal.onOpen();
+    }, [loginModal])
 
     useEffect(() => {
         dispatch(getRoom(id))
@@ -36,20 +42,27 @@ function Room() {
     
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('profile-labyrinthium'));
-        dispatch(isCompleted({ userId: user.user.id, roomId: id }))
+        if (user) {
+            dispatch(isCompleted({ userId: user.user.id, roomId: id }));
+        }
+       
     }, [dispatch, id])
 
     const markCompleteRoom = () => {
         const user = JSON.parse(localStorage.getItem('profile-labyrinthium'));
         if (user) {
-            dispatch(markComplete({ userId: user.user.id, roomId: id }))
+            dispatch(markComplete({ userId: user.user.id, roomId: id }));
+        } else {
+            onClickLogin()
         }
     }
 
     const unmarkCompleteRoom = () => {
         const user = JSON.parse(localStorage.getItem('profile-labyrinthium'));
         if (user) {
-            dispatch(unmarkCompleted({ userId: user.user.id, roomId: id }))
+            dispatch(unmarkCompleted({ userId: user.user.id, roomId: id }));
+        } else {
+            onClickLogin()
         }
     }
 

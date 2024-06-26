@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux'
 import useLoginModal from "../hooks/useLoginModel";
 import Search from "./Search";
 import { Link } from "react-router-dom";
+import { IoIosSearch } from "react-icons/io";
+import useSearchModal from "../hooks/useSearchModel";
 
 
 
@@ -46,6 +48,7 @@ function Navbar({isLoaded}) {
     
     const dispatch = useDispatch();
     const loginModal = useLoginModal();
+    const searchModal = useSearchModal();
     
     const navigate = useNavigate();
 
@@ -54,6 +57,10 @@ function Navbar({isLoaded}) {
     const onClickLogin = useCallback(() => {
         loginModal.onOpen();
     }, [loginModal])
+
+    const onClickSearch = useCallback(() => {
+        searchModal.onOpen();
+    }, [searchModal])
 
     useEffect(() => {
         if (location.pathname === "/") {
@@ -139,14 +146,15 @@ function Navbar({isLoaded}) {
 
             <div className="flex gap-4 w-full">
                     <Link to="/"><button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button></Link>
-                    {show ? <div className="flex flex-col md:flex-row w-3/5">
+                    {show ? <div className="flex flex-col hidden lg:block md:flex-row w-3/5">
                         {isLoaded ? <Search /> : <></>}
                     </div> : <></>}
             </div>    
                 
-            <div className="mobile-menu block lg:hidden">
+            <div className="mobile-menu flex items-center gap-6 block lg:hidden">
                    
-                <button aria-label="hamburger label" onClick={onClickNavigate} className={show? "flex items-center px-3 py-2 border rounded border-black text-black hover:text-gray-800 hover:border-gray-800" :  "flex items-center px-3 py-2 border rounded border-white text-white hover:text-gray-800 hover:border-gray-800"}>
+                    <IoIosSearch onClick={onClickSearch } size={30} color='white' className="cursor-pointer"/>
+                <button aria-label="hamburger label" onClick={onClickNavigate} className={show? "flex items-center px-3 py-2 border rounded border-white text-white hover:text-[#2ED6AC] hover:border-[#2ED6AC]" :  "flex items-center px-3 py-2 border rounded border-white text-white hover:text-gray-800 hover:border-gray-800"}>
                     <RxHamburgerMenu className="h-5 w-5" />
                 </button>
                     

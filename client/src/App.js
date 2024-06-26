@@ -9,6 +9,7 @@ import { useJsApiLoader } from '@react-google-maps/api';
 import Profile from './pages/profile';
 import { ToastContainer } from 'react-toastify';
 import UpdateModal from './components/modals/updateModal';
+import SearchModal from './components/modals/searchModal';
 
 const libraries = ['places']
 
@@ -35,6 +36,7 @@ function App() {
       <RegisterModal/>
       <LoginModal />
       <UpdateModal />
+      {isLoaded ? <SearchModal /> : <></>}
       <ToastContainer/>
     </>
   );
