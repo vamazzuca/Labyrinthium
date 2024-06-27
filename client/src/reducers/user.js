@@ -12,7 +12,7 @@ const userReducer = (state = {isLoadingUser: false, userData: null, updateData: 
             return { ...state, updateData: action?.data, error: false };
         case UPDATEUSER:
             
-            return { ...state, userData: action?.data, error: false };
+            return { ...state, userData: action?.data, updateData: action?.data, error: false };
         case ERROR:
             return { ...state, error: true, loading: false };
         case RESET:
