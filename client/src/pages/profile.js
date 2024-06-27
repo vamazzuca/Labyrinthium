@@ -43,7 +43,7 @@ function Profile() {
  
     }, [dispatch, userData])
    
-    console.log(completedRooms)
+   
 
     return (
         <div className='min-h-screen w-full flex flex-col items-center justify-between'>
