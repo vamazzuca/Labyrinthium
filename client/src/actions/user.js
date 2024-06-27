@@ -38,7 +38,7 @@ export const getUserUpdate = (formData) => async (dispatch) =>{
 export const updateUser = (user, updateModal) => async (dispatch) =>{
     try {
         const { data } = await api.updateUser(user);
-        console.log(data)
+        
         dispatch({ type: UPDATEUSER, data })
         updateModal.onClose()
     } catch (error) {
