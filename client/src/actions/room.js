@@ -82,13 +82,13 @@ export const isCompleted = (ids) => async (dispatch) => {
 
 export const getCompleted = (userId) => async (dispatch) => {
     try {
-        
+        dispatch({ type: 'START_LOADING' })
         const { data } = await api.completedRooms(userId)
         dispatch({ type: 'GET_COMPLETED', payload: data })
-       
+        dispatch({type: 'END_LOADING'})
     } catch (error) {
         console.log(error.message)
-       
+        dispatch({type: 'END_LOADING'})
     }
     
 }

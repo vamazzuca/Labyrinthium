@@ -19,7 +19,7 @@ function Profile() {
     const [user, setUser] = useState('');
 
     const { userData, isLoadingUser, error } = useSelector((state) => state.user)
-    const { completedRooms} = useSelector((state) => state.room)
+    const { completedRooms, isLoading } = useSelector((state) => state.room)
 
     const onClickUpdate = useCallback(() => {
         updateModal.onOpen();
@@ -40,7 +40,6 @@ function Profile() {
     
     useEffect(() => {
         dispatch((getCompleted(userData?.result?.id)))
- 
     }, [dispatch, userData])
    
    
@@ -85,13 +84,14 @@ function Profile() {
                     <h1 className='font-bold text-white text-3xl'>Completed Rooms</h1>
                 </div>
 
-                <div className="grid sm:grid-cols-1 pb-20 md:place-items-start md:grid-cols-2 place-items-center lg:grid-cols-3 xl:grid-cols-4">
-                    {completedRooms.map((room, index) => {
-                        return (
-                            <Room room={room} key={index } />
-                        )   
-                    })}
-                </div>
+                {isLoading ? <div className="flex w-full justify-center"><MoonLoader size={60} color="#581C87" /> </div> :
+                    <div className="grid sm:grid-cols-1 pb-20 md:place-items-start md:grid-cols-2 place-items-center lg:grid-cols-3 xl:grid-cols-4">
+                        {completedRooms.map((room, index) => {
+                            return (
+                                <Room room={room} key={index} />
+                            )
+                        })}
+                    </div>}
             </div>
             
             <Footer/>
