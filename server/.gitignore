@@ -1,2 +1,5 @@
 ﻿# Config files
 appsettings.json
+
+
+appsettings.Development.json
