@@ -31,6 +31,7 @@ builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

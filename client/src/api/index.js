@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API = axios.create({ baseURL: "https://localhost:7186" })
+const API = axios.create({ baseURL: "http://labyrinthium-server-prod.ca-central-1.elasticbeanstalk.com/" })
 
 export const signIn = (formData) => API.post('/api/User/signin', formData);
 export const signUp = (formData) => API.post('/api/User/signup', formData);
