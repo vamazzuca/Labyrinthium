@@ -10,6 +10,7 @@ import Profile from './pages/profile';
 import { ToastContainer } from 'react-toastify';
 import UpdateModal from './components/modals/updateModal';
 import SearchModal from './components/modals/searchModal';
+import { secret } from './constants/keys';
 
 const libraries = ['places']
 
@@ -18,10 +19,11 @@ const libraries = ['places']
 function App() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_KEY,
+    googleMapsApiKey: secret,
     libraries,
   })
   
+  console.log(secret)
   return (
     <>
       <Navbar isLoaded={isLoaded}/>

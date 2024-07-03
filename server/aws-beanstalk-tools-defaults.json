@@ -8,7 +8,7 @@
     "environment"    : "labyrinthium-server-prod",
     "enable-xray"    : false,
     "enhanced-health-type" : "enhanced",
-    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0bad78d1b3d0c90cd,sg-0a8189050f36260a8\";\"aws:ec2:vpc,Subnets\"=\"subnet-06536d09adaaf75ff,subnet-09c4ebdf0856e671e\"",
+    "additional-options"   : "",
     "proxy-server"         : "nginx",
     "solution-stack"       : "64bit Amazon Linux 2 v2.7.3 running .NET Core",
     "environment-type"     : "SingleInstance",

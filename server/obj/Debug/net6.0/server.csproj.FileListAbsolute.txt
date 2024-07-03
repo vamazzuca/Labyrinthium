@@ -72,3 +72,4 @@ C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.E
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\obj\Debug\net6.0\server.sourcelink.json
 C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\obj\Debug\net6.0\server.csproj.Up2Date
+C:\Users\mazzu\Documents\GitHub\Labyrinthium\server\bin\Debug\net6.0\aws-beanstalk-tools-defaults.json

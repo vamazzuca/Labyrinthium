@@ -25,7 +25,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
-    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    build.WithOrigins("https://labyrinthium.vittoriomazzuca.ca").AllowAnyMethod().AllowAnyHeader();
 }));
 
 var app = builder.Build();
