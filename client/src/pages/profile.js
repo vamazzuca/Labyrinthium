@@ -39,7 +39,9 @@ function Profile() {
     }, [error, navigate]);
     
     useEffect(() => {
-        dispatch((getCompleted(userData?.result?.id)))
+        if (userData) {
+            dispatch((getCompleted(userData.result.id)))
+        }
     }, [dispatch, userData])
    
    
