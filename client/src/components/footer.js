@@ -2,10 +2,12 @@ import { useLocation } from 'react-router-dom';
 import {  FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GiMazeSaw } from "react-icons/gi";
+import { useEffect, useState } from 'react';
 
 function Footer({link}) { 
 
     const location = useLocation();
+    const [userLocation, setUserLocation] = useState(null)
 
     const handleLink = () => {
         
@@ -14,13 +16,34 @@ function Footer({link}) {
         }
     }
 
+    useEffect(() => {
+        getlocation()
+    }, [])
+    
+    const getlocation = async () => {
+        try {
+            await fetch("https://ipapi.co/json/")
+                .then((response) => response.json())
+                .then((data) => {
+                    
+                    setUserLocation(data)
+                    
+                })
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
     const scrollToTop = () => {
         window.scrollTo({top: 0, behavior: 'smooth'})
     }
 
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
-      };
+    };
+    
+    const mapLocation = userLocation?.city + ", " + userLocation?.country_name;
     return (
         <div className=" w-full pt-10 pb-10 px-[5vw] bg-[#151515]">
                     
@@ -38,7 +61,7 @@ function Footer({link}) {
                                 
                             </ul>
                         <ul className="w-[13rem] flex flex-col gap-2 list-none px-[1.25rem] border-l-2 border-[#581C87] text-white font-semibold">
-                                <Link onClick={handleLink} to={"/map"}><li className='cursor-pointer'>Map</li></Link>
+                                <Link onClick={handleLink} to={`/map/${userLocation ? mapLocation: ""}?searchQuery=&latitude=${userLocation?.latitude}&longitude=${userLocation?.longitude}`}><li className='cursor-pointer'>Map</li></Link>
                                
                                 
                                 
