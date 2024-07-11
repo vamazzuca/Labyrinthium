@@ -63,10 +63,10 @@ function UpdateModal() {
 
     const Logout = useCallback(() => {
         dispatch({ type: 'LOGOUT' });
-       
+        updateModal.onClose()
         navigate("/")
         navigate(0)
-    }, [dispatch, navigate])
+    }, [dispatch, navigate, updateModal])
 
   
     const onSubmit = useCallback(async (e) => {
