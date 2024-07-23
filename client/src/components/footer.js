@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import {  FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { GiMazeSaw } from "react-icons/gi";
+import { HiOutlinePuzzlePiece } from "react-icons/hi2";
 import { useEffect, useState } from 'react';
 
 function Footer({link}) { 
@@ -51,7 +51,7 @@ function Footer({link}) {
                 <div className="max-w-[85rem] m-auto">
                     <div className="flex md:flex-row flex-col items-center lg:gap-0 gap-8">
                         <div className="w-2/12 flex justify-center md:block">
-                            <button onClick={scrollToTop} className="text-white "><GiMazeSaw size={50 } /> </button>
+                            <button onClick={scrollToTop} className="text-white "><HiOutlinePuzzlePiece size={50 } /> </button>
                         </div>
                         
                         <div className=" hidden sm:flex flex-auto w-auto ">

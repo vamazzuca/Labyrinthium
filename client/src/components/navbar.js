@@ -3,7 +3,6 @@ import NavLink from "./NavLink";
 import { RxHamburgerMenu } from "react-icons/rx";
 import MenuOverlay from "./MenuOverlay";
 import useNavigateModal from '../hooks/useNavigateModal'
-import { GiMazeSaw } from "react-icons/gi";
 import { IoMdHome } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 //import { BsCalendar2EventFill } from "react-icons/bs";
@@ -15,6 +14,7 @@ import useLoginModal from "../hooks/useLoginModel";
 import Search from "./Search";
 import { Link } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
+import { HiOutlinePuzzlePiece } from "react-icons/hi2";
 import useSearchModal from "../hooks/useSearchModel";
 
 
@@ -145,7 +145,7 @@ function Navbar({isLoaded}) {
             <div className={"flex items-center justify-between mr-auto ml-auto p-6 sm:px-8 max-w-[1900px] "}>
 
             <div className="flex gap-4 w-full">
-                    <Link to="/"><button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><GiMazeSaw size={40} />Labyrinthium</button></Link>
+                    <Link to="/"><button className="flex items-center gap-2 text-white text-xl font-bold" onClick={scrollToTop}><HiOutlinePuzzlePiece size={40} />Labyrinthium</button></Link>
                     {show ? <div className="flex flex-col hidden lg:block md:flex-row w-3/5">
                         {isLoaded ? <Search /> : <></>}
                     </div> : <></>}
