@@ -28,3 +28,6 @@
 
 
 ![Screenshot 2024-05-22 051248](https://github.com/vamazzuca/Labyrinthium/assets/35272187/d4c25eb7-26dc-45c4-bbee-686832e65291)
+
+
+![Screenshot 2024-07-18 010227](https://github.com/user-attachments/assets/c26bd3e9-58b6-47c0-8154-a1f4f1237a46)
