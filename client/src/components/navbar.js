@@ -55,8 +55,9 @@ function Navbar({isLoaded}) {
     const navigateModal = useNavigateModal();
 
     const onClickLogin = useCallback(() => {
+        navigate("/")
         loginModal.onOpen();
-    }, [loginModal])
+    }, [loginModal, navigate])
 
     const onClickSearch = useCallback(() => {
         searchModal.onOpen();
