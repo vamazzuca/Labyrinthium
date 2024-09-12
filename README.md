@@ -11,7 +11,7 @@
  • JavaScript    
  • Tailwind      
  • .NET    
- • MySQL  
+ • SQL Server  
 
 
  Live Website: https://labyrinthium.vittoriomazzuca.ca/  
